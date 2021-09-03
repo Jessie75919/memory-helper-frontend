@@ -3,6 +3,7 @@ module.exports = {
     process.env.NODE_ENV === 'production'
       ? '/static/dist/'
       : 'http://localhost:8080',
+
   outputDir: '../backend/static/dist',
   indexPath: '../../templates/base-vue.html',
 
@@ -13,4 +14,8 @@ module.exports = {
       .headers({'Access-Control-Allow-Origin': '*'})
       .writeToDisk(filePath => filePath.endsWith('index.html'));
   },
+
+  transpileDependencies: [
+    'vuetify'
+  ]
 };
