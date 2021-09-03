@@ -1,32 +1,38 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <v-app-bar dark color="secondary" flat app>
+      <v-toolbar-title>{{ $route.name }}</v-toolbar-title>
+    </v-app-bar>
+
+    <v-main app>
+      <router-view/>
+    </v-main>
+
+    <v-bottom-navigation dark app>
+      <div class="d-flex justify-space-around align-self-center" style="width: 100%">
+        <v-btn href="/review">
+          <span>Review</span>
+          <v-icon>mdi-book-open</v-icon>
+        </v-btn>
+        <v-btn href="/create">
+          <span>Create</span>
+          <v-icon>mdi-pencil-box</v-icon>
+        </v-btn>
+        <v-btn icon>
+          <v-icon large>mdi-format-list-bulleted-square</v-icon>
+        </v-btn>
+      </div>
+    </v-bottom-navigation>
+  </v-app>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
 
-#nav {
-  padding: 30px;
+export default {
+  name: 'App',
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
+  data: () => ({
+    
+  }),
+};
+</script>
