@@ -3,7 +3,7 @@
     <v-row>
       <v-col>
         <v-tabs v-model="selected_tab" @change="onTabChange">
-          <v-tab v-for="tab in tabs">{{ tab.label }}</v-tab>
+          <v-tab v-for="tab in tabs" :key="tab.val">{{ tab.label }}</v-tab>
         </v-tabs>
       </v-col>
     </v-row>
@@ -12,6 +12,7 @@
       {{ error_message }}
     </v-alert>
 
+    <!-- Question Lists =============================================== -->
     <v-row v-for="(question, i) in questions" :key="'q_' + question.id" v-if="questions">
       <v-col>
         <v-card class="mx-auto">
@@ -19,14 +20,12 @@
             <v-toolbar-title class="text-body-3">
               {{ question.content }}
             </v-toolbar-title>
-            <v-btn icon class="ml-auto" @click="openSheet(question)">
+            <v-btn icon class="ml-auto" @click="openActionsPanel(question)">
               <v-icon>mdi-format-list-bulleted</v-icon>
             </v-btn>
           </v-toolbar>
           <v-card-text v-if="question.show_answer === true && question.answers.length > 0">
-            <p class="text--primary">
-              {{ question.answers[0].content }}
-            </p>
+            <span class="text--primary content_pre">{{ question.answers[0].content }}</span>
           </v-card-text>
           <v-card-actions v-if="question.answers.length > 0">
             <v-btn text block color="indigo" class="text-center"
@@ -44,10 +43,9 @@
       </v-col>
     </v-row>
 
-
+    <!-- Delete / Edit panel ========================================== -->
     <v-bottom-sheet v-model="show_sheet">
       <v-sheet class="text-center" height="200px" v-if="selected_question">
-
         <div style="width: 90%" class="mx-auto">
           <div class="text-h6 text--primary text-truncate pa-2">
             {{ selected_question.content }}
@@ -55,16 +53,17 @@
           <div class="text-truncate pa-2" v-if="selected_question">
             {{ selected_question.answers[0].content }}
           </div>
-          <v-btn class="mt-3" rounded block dark color="red lighten-1" @click="attendToRemove">
+          <v-btn class="mt-3" rounded block dark color="red lighten-1" @click="attemptToRemove">
             Delete
           </v-btn>
-          <v-btn class="mt-5" rounded block dark color="blue lighten-1" @click="show_sheet = !show_sheet">
+          <v-btn class="mt-5" rounded block dark color="blue lighten-1" @click="toEdit">
             Edit
           </v-btn>
         </div>
       </v-sheet>
     </v-bottom-sheet>
 
+    <!-- Confirming Panel ========================================= -->
     <v-snackbar v-model="should_show_remove_snackbar">
       {{ snackbar_message }}
       <template v-slot:action="{ attrs }">
@@ -77,11 +76,29 @@
       </template>
     </v-snackbar>
 
+    <!-- Updating Question Panel ======================================= -->
+    <UpdatingModal
+        v-if="selected_question"
+        ref="updating_modal"
+        :question="selected_question"
+        @submit-success="onSubmitSuccess"
+        @submit-failed="onSubmitFailed"
+    />
+
+    <v-btn v-if="questions"
+        color="deep-orange" dark fixed bottom right fab
+           style="bottom: 13vh"
+           :href="studyUrl"
+    >
+      <v-icon>mdi-book-open-page-variant</v-icon>
+    </v-btn>
+
   </v-container>
 </template>
 
 <script>
 import axios from 'axios';
+import UpdatingModal from '@/components/modals/UpdatingModal';
 
 export default {
   name: 'ReviewPage',
@@ -103,17 +120,31 @@ export default {
     };
   },
 
-  components: {},
+  components: {UpdatingModal},
 
   methods: {
-    closeSheet() {
+    updateLocalData(question) {
+      const _q = this.questions.find(q => q.id === question.id);
+      _q.content = question.content;
+      _q.answers[0] = question.answers[0];
+    },
+    onSubmitSuccess(res) {
+      this.updateLocalData(res.data);
+      this.$refs.updating_modal.close();
+      this.closeActionsPanel();
+    },
+    onSubmitFailed(err) {
+      this.show_error = true;
+      this.error_message = err;
+    },
+    closeActionsPanel() {
       this.selected_question = null;
       this.show_sheet = false;
     },
-    closesSnackbar() {
+    closeConfirmingPanel() {
       this.should_show_remove_snackbar = false;
     },
-    openSheet(question) {
+    openActionsPanel(question) {
       this.show_sheet = true;
       this.selected_question = question;
     },
@@ -129,14 +160,17 @@ export default {
         }
 
         this.questions.splice(idx, 1);
-        this.closeSheet();
-        this.closesSnackbar();
+        this.closeActionsPanel();
+        this.closeConfirmingPanel();
       }).catch(err => {
         this.show_error = true;
         this.error_message = err;
       });
     },
-    attendToRemove() {
+    toEdit() {
+      this.$refs.updating_modal.open();
+    },
+    attemptToRemove() {
       if (!this.selected_question) {
         return false;
       }
@@ -145,7 +179,7 @@ export default {
       this.snackbar_message = `Are you sure to remove "${ this.selected_question.content }"?`;
     },
     loadPage() {
-      this.show_error = false;
+      this.resetError()
       this.questions = [];
       axios.get(`/api/questions?q=${ this.mode }`).then(res => {
         this.questions = res.data.map(item => ({
@@ -157,6 +191,10 @@ export default {
         this.error_message = err;
       });
     },
+    resetError() {
+      this.show_error = false;
+      this.error_message = ""
+    },
     onTabChange(e) {
       this.selected_tab = e;
       this.loadPage();
@@ -166,11 +204,14 @@ export default {
     mode() {
       return this.tabs[this.selected_tab].val;
     },
+    studyUrl() {
+      return `/study/${ this.mode }`;
+    },
   },
   watch: {
     show_sheet(newVal) {
       if (newVal === false) {
-        this.closeSheet();
+        this.closeActionsPanel();
       }
     },
   },
@@ -181,4 +222,9 @@ export default {
 </script>
 
 <style scoped>
+.content_pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: inherit;
+}
 </style>
