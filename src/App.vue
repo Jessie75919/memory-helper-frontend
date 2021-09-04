@@ -18,9 +18,6 @@
           <span>Create</span>
           <v-icon>mdi-pencil-box</v-icon>
         </v-btn>
-        <v-btn icon>
-          <v-icon large>mdi-format-list-bulleted-square</v-icon>
-        </v-btn>
       </div>
     </v-bottom-navigation>
   </v-app>
