@@ -18,8 +18,13 @@ const routes = [
   {
     path: '/review',
     name: 'Review',
-    props: true,
     component: () => import(/* webpackChunkName: "review"*/ '../views/Review')
+  },
+  {
+    path: '/study/:mode?',
+    name: 'Study',
+    props: true,
+    component: () => import(/* webpackChunkName: "review"*/ '../views/Study')
   }
 ]
 
