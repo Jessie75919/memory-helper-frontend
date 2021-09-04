@@ -4,7 +4,7 @@
            src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
     >
       <v-card-title>
-        {{ _question || 'Question' }}
+        {{ loc_question || 'Question' }}
       </v-card-title>
     </v-img>
 
@@ -12,22 +12,22 @@
       <form class="mt-3">
         <v-text-field
             outlined
-            v-model="_question"
+            v-model="loc_question"
             :error-messages="questionErrors"
             :counter="255"
             label="Question"
             required
-            @input="$v.question.$touch()"
-            @blur="$v.question.$touch()"
+            @input="$v.loc_question.$touch()"
+            @blur="$v.loc_question.$touch()"
         ></v-text-field>
         <v-textarea
             outlined
-            v-model="_answer"
+            v-model="loc_answer"
             :error-messages="answerErrors"
             label="Answer"
             required
-            @input="$v._answer.$touch()"
-            @blur="$v._answer.$touch()"
+            @input="$v.loc_answer.$touch()"
+            @blur="$v.loc_answer.$touch()"
         ></v-textarea>
         <v-btn block x-large color="primary" @click="submit">Save</v-btn>
       </form>
@@ -37,22 +37,41 @@
 
 <script>
 import axios from 'axios';
+import {validationMixin} from 'vuelidate';
+import {maxLength, required} from 'vuelidate/lib/validators';
 
 export default {
   name: 'EditComponent',
-  props: ['question', 'answer'],
+  props: {
+    question: {
+      type: String,
+      default: ''
+    },
+    answer: {
+      type: String,
+      default: ''
+    },
+    question_id: {
+      type: Number,
+    }
+  },
+  mixins: [validationMixin],
+  validations: {
+    loc_question: {required, maxLength: maxLength(255)},
+    loc_answer: {required},
+  },
   data() {
     return {
-      _question: this.question,
-      _answer: this.answer,
+      loc_question: this.question,
+      loc_answer: this.answer,
     };
   },
 
   methods: {
     resetInputs() {
       this.$v.$reset();
-      this._answer = '';
-      this._question = '';
+      this.loc_answer = '';
+      this.loc_question = '';
     },
     submit() {
       this.$v.$touch();
@@ -61,15 +80,19 @@ export default {
       }
 
       const payload = {
-        'answers': [{'content': this._answer}],
-        'content': this._question,
+        'answers': [{'content': this.loc_answer}],
+        'content': this.loc_question,
       };
 
-      axios.post('/api/questions', payload).then(res => {
+      const method = this.question_id ? 'put' : 'post';
+      const detail = this.question_id ? `/${this.question_id}` : '';
+      const url = '/api/questions' + detail
+
+      axios[method](url, payload).then(res => {
         this.$emit('submit-success', res)
-        this.message = 'Save Successfully!';
+        this.resetInputs();
       }).catch(err => {
-        this.$emit('submit-failed', res)
+        this.$emit('submit-failed', err)
       })
     },
   },
@@ -77,15 +100,15 @@ export default {
   computed: {
     questionErrors() {
       const errors = [];
-      if (!this.$v._question.$dirty) return errors;
-      !this.$v._question.maxLength && errors.push('Question must be at most 255 characters long');
-      !this.$v._question.required && errors.push('Question is required.');
+      if (!this.$v.loc_question.$dirty) return errors;
+      !this.$v.loc_question.maxLength && errors.push('Question must be at most 255 characters long');
+      !this.$v.loc_question.required && errors.push('Question is required.');
       return errors;
     },
     answerErrors() {
       const errors = [];
-      if (!this.$v._answer.$dirty) return errors;
-      !this.$v._answer.required && errors.push('Answer is required');
+      if (!this.$v.loc_answer.$dirty) return errors;
+      !this.$v.loc_answer.required && errors.push('Answer is required');
       return errors;
     },
   },
