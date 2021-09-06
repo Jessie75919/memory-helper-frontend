@@ -8,7 +8,12 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: ReviewPage
+    component: ReviewPage,
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import(/* webpackChunkName: "login" */ '../views/Login'),
   },
   {
     path: '/create',
@@ -31,7 +36,15 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
-})
+  routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.name !== 'Login' && !store.getters.isAuthenticated) {
+    window.location.href = '/login';
+  } else {
+    next();
+  }
+});
 
 export default router
