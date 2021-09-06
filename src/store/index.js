@@ -38,11 +38,11 @@ export default new Vuex.Store({
       }).catch(err => {
         console.log(err);
       });
-  },
+    },
     logout(context){
       context.commit('removeToken');
       window.location.href = '/login';
-  }
+    }
   },
   modules: {},
 });

@@ -93,9 +93,6 @@
               </v-btn>
             </v-card-actions>
           </v-card>
-          <div>
-
-          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -118,7 +115,7 @@ export default {
       questions: null,
       current_index: 0,
       show_error: false,
-      error_message: ''
+      error_message: '',
     };
   },
   methods: {
@@ -127,14 +124,14 @@ export default {
     },
     resetError() {
       this.show_error = false;
-      this.error_message = ""
+      this.error_message = '';
     },
     answerQuestionApi(choice) {
       this.resetError();
       axios.put(`/api/answer-question/${ this.currentQuestion.id }`,
           {choice}).catch(err => {
         this.show_error = true;
-        this.error_message = "Oops! Something wrong! Reload Page Please!"
+        this.error_message = 'Oops! Something wrong! Reload Page Please!';
       });
     },
     toAnswer(choice) {
@@ -163,7 +160,8 @@ export default {
         ...item,
       }));
     }).catch(err => {
-
+      this.show_error = true;
+      this.error_message = 'Oops! Something wrong! Reload Page Please!';
     });
   },
 };

@@ -1,8 +1,9 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import ReviewPage from '@/views/Review';
+import store from '@/store';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
@@ -18,20 +19,20 @@ const routes = [
   {
     path: '/create',
     name: 'Create',
-    component: () => import(/* webpackChunkName: "create" */ '../views/Create')
+    component: () => import(/* webpackChunkName: "create" */ '../views/Create'),
   },
   {
     path: '/review',
     name: 'Review',
-    component: () => import(/* webpackChunkName: "review"*/ '../views/Review')
+    component: () => import(/* webpackChunkName: "review"*/ '../views/Review'),
   },
   {
     path: '/study/:mode?',
     name: 'Study',
     props: true,
-    component: () => import(/* webpackChunkName: "review"*/ '../views/Study')
-  }
-]
+    component: () => import(/* webpackChunkName: "study"*/ '../views/Study'),
+  },
+];
 
 const router = new VueRouter({
   mode: 'history',
@@ -47,4 +48,4 @@ router.beforeEach((to, from, next) => {
   }
 });
 
-export default router
+export default router;
