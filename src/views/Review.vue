@@ -20,6 +20,10 @@
             <v-toolbar-title class="text-body-3">
               {{ question.content }}
             </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <p class="text-caption mt-4">
+              <span class="font-weight-bold">{{ question.count_of_seen }}</span> times
+            </p>
             <v-btn icon class="ml-auto" @click="openActionsPanel(question)">
               <v-icon>mdi-format-list-bulleted</v-icon>
             </v-btn>

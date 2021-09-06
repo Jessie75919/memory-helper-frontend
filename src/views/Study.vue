@@ -32,6 +32,7 @@
                 src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
             >
               <v-card-title>{{ currentQuestion.content }}</v-card-title>
+              <p class="ml-3 text-caption" >seen <span class="font-weight-bold">{{ currentQuestion.count_of_seen }}</span> times</p>
             </v-img>
 
             <v-card-actions v-if="! currentQuestion.show_answer">
