@@ -16,7 +16,7 @@
               required
               rounded
               filled
-              dense
+              dark
               @input="$v.email.$touch()"
               @blur="$v.email.$touch()"
           ></v-text-field>
@@ -26,7 +26,7 @@
               label="Password"
               required
               filled
-              dense
+              dark
               rounded
               @input="$v.password.$touch()"
               @blur="$v.password.$touch()"
@@ -104,7 +104,7 @@ export default {
 <style scoped>
 .outer-box {
   height: 95vh;
-  background: url('https://images.unsplash.com/photo-1536329583941-14287ec6fc4e?ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');
+  background: url('../assets/main_background.jpg');
   background-position: center;
   background-size: cover;
 }
