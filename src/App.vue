@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
 
 export default {
   name: 'App',
@@ -39,8 +39,20 @@ export default {
       'isAuthenticated',
     ]),
   },
-  methods:{
-    ...mapActions(['logout'])
-  }
+  methods: {
+    ...mapActions(['logout']),
+  },
 };
 </script>
+<style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+$font-family: 'Varela Round';
+
+.v-application {
+  [class*='text-'] {
+    font-family: $font-family, sans-serif !important;
+  }
+
+  font-family: $font-family, sans-serif !important;
+}
+</style>
