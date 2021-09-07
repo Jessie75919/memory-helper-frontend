@@ -28,7 +28,8 @@
             required
             @input="$v.loc_answer.$touch()"
             @blur="$v.loc_answer.$touch()"
-            @keydown.enter="submit"
+            @keydown.meta.enter="submit"
+            @keydown.ctrl.enter="submit"
         ></v-textarea>
         <v-btn block x-large color="primary" @click="submit">Save</v-btn>
       </form>
