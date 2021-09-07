@@ -3,7 +3,7 @@
     <v-container>
     <v-row>
       <v-col>
-        <p class="text-h3 text-center white--text font-weight-bold">Memory Helper</p>
+        <p class="text-h3 text-center white--text font-weight-bold">ChanChan Memory</p>
       </v-col>
     </v-row>
     <v-row align="center">
