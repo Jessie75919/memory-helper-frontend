@@ -47,6 +47,21 @@
       </v-col>
     </v-row>
 
+    <v-row v-if="questions.length === 0">
+      <v-col>
+        <v-alert
+            color="blue-grey"
+            dark
+            dense
+            icon="mdi-school"
+            prominent
+            class="text-capitalize"
+        >
+          no questions for today ! let's learn something
+        </v-alert>
+      </v-col>
+    </v-row>
+
     <!-- Delete / Edit panel ========================================== -->
     <v-bottom-sheet v-model="show_sheet">
       <v-sheet class="text-center" height="200px" v-if="selected_question">
