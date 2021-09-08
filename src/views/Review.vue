@@ -47,7 +47,7 @@
       </v-col>
     </v-row>
 
-    <v-row v-if="questions.length === 0">
+    <v-row v-if="questions.length === 0 && !loading">
       <v-col>
         <v-alert
             color="blue-grey"
@@ -118,6 +118,7 @@
 <script>
 import axios from 'axios';
 import UpdatingModal from '@/components/modals/UpdatingModal';
+import {mapGetters} from 'vuex';
 
 export default {
   name: 'ReviewPage',
@@ -220,6 +221,9 @@ export default {
     },
   },
   computed: {
+    ...mapGetters([
+      'loading',
+    ]),
     mode() {
       return this.tabs[this.selected_tab].val;
     },

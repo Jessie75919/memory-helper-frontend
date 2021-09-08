@@ -3,6 +3,13 @@
     <v-app-bar dark color="secondary" flat app>
       <v-toolbar-title v-if="isAuthenticated">{{ $route.name }}</v-toolbar-title>
       <v-toolbar-title v-else>ChanChan Memory</v-toolbar-title>
+      <v-progress-linear
+          :active="loading"
+          :indeterminate="loading"
+          absolute
+          bottom
+          color="blue lighten-1"
+      ></v-progress-linear>
       <v-spacer></v-spacer>
       <v-btn depressed color="secondary" @click="logout" v-if="isAuthenticated">
         <v-icon>mdi-logout</v-icon>
@@ -37,6 +44,7 @@ export default {
   computed: {
     ...mapGetters([
       'isAuthenticated',
+      'loading',
     ]),
   },
   methods: {

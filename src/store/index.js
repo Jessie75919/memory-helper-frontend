@@ -9,11 +9,13 @@ export default new Vuex.Store({
   state: {
     access_token: StorageHelper.get('access_token'),
     refresh_token: StorageHelper.get('refresh_token'),
+    is_loading: true,
   },
   getters:{
     isAuthenticated:(state) => {
       return Boolean(state.access_token);
-    }
+    },
+    loading: (state) => state.is_loading
   },
   mutations: {
     storeToken: (state, token) => {
@@ -27,7 +29,9 @@ export default new Vuex.Store({
       state.access_token = null;
       state.refresh_token = null;
       StorageHelper.clear();
-    }
+    },
+    startLoading:(state) => state.is_loading = true,
+    stopLoading:(state) => state.is_loading = false,
   },
   actions: {
     login(context, payload) {

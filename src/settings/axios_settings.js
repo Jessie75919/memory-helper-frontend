@@ -42,14 +42,17 @@ export function axiosSetConfig() {
   _handleCsrfToken();
 
   axios.interceptors.request.use(async function(config) {
+    store.commit('startLoading');
     return config;
   }, function(error) {
     return Promise.reject(error);
   });
 
   axios.interceptors.response.use(function(response) {
+    store.commit('stopLoading');
     return response;
   }, function(error) {
+    store.commit('stopLoading');
     if (error.response) {
       switch (error.response.status) {
         case 400:
