@@ -16,12 +16,12 @@
     <v-row v-for="(question, i) in questions" :key="'q_' + question.id" v-if="questions">
       <v-col>
         <v-card class="mx-auto">
-          <v-toolbar color="cyan darken-1" dark dense flat>
-            <v-toolbar-title class="text-body-3">
+          <v-toolbar color="cyan darken-1" dark flat height="auto">
+            <v-toolbar-title class="text-wrap text-body-2">
               {{ question.content }}
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <p class="text-caption mt-4">
+            <p class="text-caption mt-4 text-center">
               <span class="font-weight-bold">{{ question.count_of_seen }}</span> times
             </p>
             <v-btn icon class="ml-auto" @click="openActionsPanel(question)">

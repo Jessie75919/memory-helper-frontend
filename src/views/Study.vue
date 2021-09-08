@@ -25,14 +25,13 @@
       </v-row>
       <v-row v-if="currentQuestion">
         <v-col>
-          <v-card class="mx-auto" max-width="400">
+          <v-card class="mx-auto" width="auto">
             <v-img
                 class="white--text align-end"
-                height="100px"
-                src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                src="../assets/study_background.jpg"
             >
               <v-card-title>{{ currentQuestion.content }}</v-card-title>
-              <p class="ml-3 text-caption" >seen <span class="font-weight-bold">{{ currentQuestion.count_of_seen }}</span> times</p>
+              <p class="mr-3 text-caption text-right" >seen <span class="font-weight-bold">{{ currentQuestion.count_of_seen }}</span> times</p>
             </v-img>
 
             <v-card-actions v-if="! currentQuestion.show_answer">
