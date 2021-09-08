@@ -9,7 +9,7 @@ export default new Vuex.Store({
   state: {
     access_token: StorageHelper.get('access_token'),
     refresh_token: StorageHelper.get('refresh_token'),
-    is_loading: true,
+    is_loading: false,
   },
   getters:{
     isAuthenticated:(state) => {
