@@ -25,7 +25,7 @@
       </v-row>
       <v-row v-if="currentQuestion">
         <v-col>
-          <v-card class="mx-auto" width="auto">
+          <v-card class="mx-auto" width="400">
             <v-img
                 class="white--text align-end"
                 src="../assets/study_background.jpg"
