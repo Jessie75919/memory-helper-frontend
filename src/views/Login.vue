@@ -22,6 +22,7 @@
           ></v-text-field>
           <v-text-field
               v-model="password"
+              type="password"
               :error-messages="passwordErrors"
               label="Password"
               required
